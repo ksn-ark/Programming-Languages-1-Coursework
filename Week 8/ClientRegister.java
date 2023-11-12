@@ -13,7 +13,7 @@ public class ClientRegister {
         System.out.println(client2);
         System.out.println(client3);
 
-        System.out.println(client4.returnName());
+        System.out.println(client4.returnID());
     }
 }
 
