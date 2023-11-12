@@ -19,6 +19,7 @@ public class GasMeterTest {
                 meter.refuel(answer, amount);
             } else {
                 valueCorrect = false;
+                reader.close();
             }
         }
        
