@@ -1,17 +1,17 @@
-# **Electric Scooter Database System**
+# **Cycle Database System**
 
-Database System for Electric Scooters in a city area (represented as an x-y plane).
+Java based renting system for cycles in a city area (represented as an x-y plane).
 
 ## **Examples of records**:
 
-### **Example of ScooterObject Array**:
-> [{ScooterObject},{ScooterObject},...]
+### **Example of cycleObject Array**:
+> [{cycleObject},{cycleObject},...]
 
-### **Example of ScooterObject**
-> Scooter { id: 35, x: 35, y: 100, Battery: 50, Odometer: 345.456 }
+### **Example of cycleObject**
+> cycle { id: 35, x: 35, y: 100, Battery: 50, rentedHours: 7 }
 
 ## **Example of user Object**:
-> User { x: 40, y: 30 }
+> User { x: 40, y: 30, rentedHours: 12 }
 
 ## **Command guide**
 
@@ -34,19 +34,20 @@ Invalid args will return -
 * d-delete
 * u-update
 * g-get
+* r-rent
 
 ### Second args:
 
 * u-user
-* s-scooter
+* c-cycle
 
 ### Third args:
 
 * i-id
 * l-location
-* b-battery
-* o-odometer
-* d-diagonal
+* b-bill
+* r-rentedHours
+* a-areaRange
 * p-proximity
 
 ## **Guide for value args**
@@ -60,7 +61,7 @@ Invalid values will return -
 
 ### Longhand
 
-update scooter location⏎
+update cycle location⏎
 20⏎
 30⏎
 50⏎
@@ -86,34 +87,48 @@ u s l⏎
 
 * **intial user location**  (x-value: +ve int (0), y-value: +ve int(0)) _//asks x & y coords of user on launch, is 0,0 by default._
 
+* **rent per hour** (rent per hour: +ve non-zero float (0.5)) _//asks for rent per hour rate_
+
 ### **Adding/deleting records:**
 
-* **add scooter**  (x-value: +ve int (0), y-value: +ve int(0), Battery: +ve int < 100 (100), OdometerValue: +ve double (0)) _//adds record with given values._
+* **add cycle**  (x-value: +ve int (0), y-value: +ve int(0), rentedHours: +ve double (0)) _//adds record with given values._
 
-* **delete scooter**  (ScooterId: +ve int(required)) _//if left empty the command below is implemented._
+* **delete cycle**  (cycleId: +ve int(required)) _//if left empty the command below is implemented._
 
-* **delete scooter**  (x-value: +ve int(0), y-value: +ve (0), arSide: +ve int(1), arSide2: +ve int(arSide)) _//delete records in rectangle of length = arSide, breadth = arSide2 & bottom-left-corner= x,y._
+* **delete cycle**  (x-value: +ve int(0), y-value: +ve (0), arSide: +ve int(1), arSide2: +ve int(arSide)) _//delete records in rectangle of length = arSide, breadth = arSide2 & bottom-left-corner= x,y._
 
-* **delete scooter diagonal**  (/ same as 1st above/ , /same as 2nd above/ , x2-value: +ve int(0), y2-value: +ve int (0)) _//delete records in rectangle whose bottom-left-corner= x,y & top-right-corner= x2,y2._
+* **delete cycle area**  (/ same as 1st above/ , /same as 2nd above/ , x range: +ve int(0), y range: +ve int (x)) _//delete records in a rectangle of sides (x range*2)-1,(y range*2 -1) range centered at x,y_
 
 ### **Updating records:**
 
-* **update scooter location**  (ScooterId: +ve int (required), x-value: +ve int (unchanged), y-value: +ve int(unchanged), new-Battery-%: +ve int < 100 (unchanged)) _//self explanatory._
-
-* **update scooter battery**  (ScooterId: +ve int(required), new-Battery-%: +ve int < 100 (required)) _//name says all._
+* **update cycle location**  (cycleId: +ve int (required), x-value: +ve int (unchanged), y-value: +ve int(unchanged)) _//self explanatory._
 
 * **update user location**  (x-value: +ve int (0), y-value: +ve int(0)) _//as named._
 
 ### **Requesting records:**
 
-* **get user**  () _//returns user location._
+* **get user**  (ratePerHour in euro : +ve non-zero float (0.5) ) _//returns user location & rented hours & total spending in euro._
 
-* **get scooter**  () _//returns all records._
+* **get user location**  () _//returns user location_
 
-* **get scooter id**  (ScooterId: +ve int(required), OptionalScooterId: +ve int (ScooterId)) _//returns records by id range, range inclusive._
+* **get user rentedHours** () _//returns user rented hours_
 
-* **get scooter battery**  (minBattery%: +ve int < 100 (0), maxBatter%: +ve int < 100 (100)) _//returns records by battery, range inclusive._
+* **get user bill** (ratePerHour in euro : +ve non-zero float (0.5)) _//returns user total spending_
 
-* **get scooter odometer**  (maxOdometerValue: +ve int (unlimited), minOdometerValue: +ve int < maxOdometerValue (0)) _//returns records by odometer value, range inclusive._
+* **get cycle**  () _//returns all records._
 
-* **get scooter proximity**  (range x: +ve int (5), range y: +ve int (x), minBattery %: +ve int < 100 (0)) _//returns records by distance from user._
+* **get cycle id**  (cycleId: +ve int(required), OptionalcycleId: +ve int (cycleId)) _//returns records by id range, range inclusive._
+
+* **get cycle rentedHours**  (maxrentedHours: +ve int (unlimited), minrentedHours: +ve int <= maxrentedHours (0)) _//returns records by rented hours, range inclusive._
+
+* **get cycle proximity**  (range x: +ve int (5), range y: +ve int (x)) _//returns records by distance from user._
+
+### **Renting:**
+
+* **rent cycle**  (cycleId1: +ve int (required), cycleId2: +ve int (cycleId1), hours to rent: +ve non-zero int < 25 (1), rate per hour: +ve float (0.5)) _//rents cycles in inclusive range(cycleId1,cycleId2), calculates bill and asks for confirmation_
+
+* **rent cycle location**  (number of cycles : +ve nono-zero int (1), hours to rent: +ve non-zero int < 25 (1), x-value: +ve int(0), y-value: +ve (0), rate per hour: +ve float (0.5)) _//rents cycles by location, if enough cycles, calculates bill and asks for confirmation, if not enough cycles presents invoice for max cycles & asks for confirmation, if more cycles than needed at location lowest id's are rented_
+
+* **rent cycle proximity** (number of cycles : +ve non-zero int (1), hours to rent: +ve non-zero int < 25 (1), range x: +ve int (5), range y: +ve int (5), rate per hour: +ve float (0.5)) _//rents cycles by proximity to user location, handles excess, matching number and scarcity of cycles as in previous command_
+
+* **rent cycle area**  (number of cycles : +ve non-zero int (1), hours to rent: +ve non-zero int < 25 (1), x-value: +ve int(0), y-value: +ve (0), range x: +ve int (5), range y: +ve int (5), rate per hour: +ve float (0.5)) _//rents cycles by proximity to given location, handles excess, matching number & scarcity of cycles as in previous command_
