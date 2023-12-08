@@ -25,7 +25,7 @@ Each arg for command values is referred to as a value arg.
 
 Command args are case-insensitive. Three args are not mandatory, simply as many as needed for the command.
 
-Invalid args will return -
+Invalid command will return -
 
 > Error 404: Command Not Found.
 
@@ -72,7 +72,7 @@ If no matching cycles exist:
 
 Invalid values will return -
 
-> Invalid arg: command failed, no changes made.
+> Invalid values: command failed, no changes made.
 
 ## Examble of command:
 
@@ -169,7 +169,9 @@ u s l⏎
 
   - _returns all records._
 
-- **get cycle rented** `()` -_returns all rented cycles_
+- **get cycle rented** `()`
+
+  - _returns all rented cycles_
 
 - **get cycle id** `(cycleId: +ve int(required), OptionalcycleId: +ve int (cycleId), include isRented : boolean (false))`
 
